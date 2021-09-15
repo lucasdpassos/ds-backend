@@ -32,8 +32,8 @@
         "headers": {
             "ping": "true"
         },
-        "x": 500,
-        "y": 200,
+        "x": 840,
+        "y": 260,
         "wires": []
     },
     {
@@ -47,6 +47,49 @@
         "x": 330,
         "y": 200,
         "wires": [
+            [
+                "103b5296f1a75456"
+            ]
+        ]
+    },
+    {
+        "id": "b3f48d7ec44a9645",
+        "type": "e-mail",
+        "z": "9ab91bb2.9ce5d8",
+        "server": "smtp.gmail.com",
+        "port": "465",
+        "secure": true,
+        "tls": false,
+        "name": "lucas.depassos@yahoo.com.br",
+        "dname": "",
+        "x": 870,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "103b5296f1a75456",
+        "type": "switch",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nnull"
+            },
+            {
+                "t": "nnull"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 550,
+        "y": 200,
+        "wires": [
+            [
+                "b3f48d7ec44a9645"
+            ],
             [
                 "c451905a7368c9a7"
             ]
