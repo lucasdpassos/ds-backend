@@ -19,25 +19,37 @@
         "y": 200,
         "wires": [
             [
-                "8316afa34c3984d0"
+                "80c1cf231da0c15f"
             ]
         ]
     },
     {
-        "id": "8316afa34c3984d0",
-        "type": "debug",
+        "id": "c451905a7368c9a7",
+        "type": "http response",
         "z": "9ab91bb2.9ce5d8",
         "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 370,
+        "statusCode": "200",
+        "headers": {
+            "ping": "true"
+        },
+        "x": 500,
         "y": 200,
         "wires": []
+    },
+    {
+        "id": "80c1cf231da0c15f",
+        "type": "json",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 330,
+        "y": 200,
+        "wires": [
+            [
+                "c451905a7368c9a7"
+            ]
+        ]
     }
 ]
