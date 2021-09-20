@@ -67,7 +67,7 @@
         "type": "function",
         "z": "9ab91bb2.9ce5d8",
         "name": "",
-        "func": "msg.payload.type = \"message\"\nmsg.payload.chatId = 1354493990\nmsg.payload.content = msg.payload.data\nreturn msg;",
+        "func": "msg.payload.type = \"message\"\nmsg.payload.chatId = 1354493990\nmsg.payload.content = msg.payload.ping\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -77,7 +77,8 @@
         "y": 320,
         "wires": [
             [
-                "527b143fa89c4d92"
+                "527b143fa89c4d92",
+                "ad881a70c4d9014f"
             ]
         ]
     },
@@ -96,6 +97,23 @@
         "statusType": "auto",
         "x": 410,
         "y": 120,
+        "wires": []
+    },
+    {
+        "id": "ad881a70c4d9014f",
+        "type": "debug",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 400,
         "wires": []
     }
 ]
