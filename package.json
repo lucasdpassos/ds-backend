@@ -31,7 +31,9 @@
     "dotenv": "10.0.0",
     "express": "4.17.1",
     "node-red": "2.0.5",
+    "node-red-contrib-json": "~0.2.0",
     "node-red-contrib-salesforce": "~0.7.3",
+    "node-red-contrib-telegrambot": "~10.0.7",
     "node-red-node-email": "~1.12.3",
     "swagger-ui-express": "4.1.6"
   },

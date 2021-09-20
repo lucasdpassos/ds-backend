@@ -7,6 +7,30 @@
         "info": ""
     },
     {
+        "id": "9e5eac024310308f",
+        "type": "telegram bot",
+        "botname": "servo1_ldp_bot",
+        "usernames": "",
+        "chatids": "",
+        "baseapiurl": "",
+        "updatemode": "polling",
+        "pollinterval": "300",
+        "usesocks": false,
+        "sockshost": "",
+        "socksport": "6667",
+        "socksusername": "anonymous",
+        "sockspassword": "",
+        "bothost": "",
+        "botpath": "",
+        "localbotport": "8443",
+        "publicbotport": "8443",
+        "privatekey": "",
+        "certificate": "",
+        "useselfsignedcertificate": false,
+        "sslterminated": false,
+        "verboselogging": false
+    },
+    {
         "id": "cf6ba580.d136e8",
         "type": "http in",
         "z": "9ab91bb2.9ce5d8",
@@ -19,80 +43,59 @@
         "y": 200,
         "wires": [
             [
-                "80c1cf231da0c15f"
+                "da02cb6ebc0e7559",
+                "b53c87461e71baf3"
             ]
         ]
     },
     {
-        "id": "c451905a7368c9a7",
-        "type": "http response",
+        "id": "527b143fa89c4d92",
+        "type": "telegram sender",
         "z": "9ab91bb2.9ce5d8",
         "name": "",
-        "statusCode": "200",
-        "headers": {
-            "ping": "true"
-        },
-        "x": 840,
-        "y": 260,
-        "wires": []
+        "bot": "9e5eac024310308f",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 570,
+        "y": 240,
+        "wires": [
+            []
+        ]
     },
     {
-        "id": "80c1cf231da0c15f",
-        "type": "json",
+        "id": "da02cb6ebc0e7559",
+        "type": "function",
         "z": "9ab91bb2.9ce5d8",
         "name": "",
-        "property": "payload",
-        "action": "",
-        "pretty": false,
-        "x": 330,
-        "y": 200,
+        "func": "msg.payload.type = \"message\"\nmsg.payload.chatId = 1354493990\nmsg.payload.content = msg.payload.ping\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 320,
         "wires": [
             [
-                "103b5296f1a75456"
+                "527b143fa89c4d92"
             ]
         ]
     },
     {
-        "id": "b3f48d7ec44a9645",
-        "type": "e-mail",
-        "z": "9ab91bb2.9ce5d8",
-        "server": "smtp.gmail.com",
-        "port": "465",
-        "secure": true,
-        "tls": false,
-        "name": "lucas.depassos@yahoo.com.br",
-        "dname": "",
-        "x": 870,
-        "y": 100,
-        "wires": []
-    },
-    {
-        "id": "103b5296f1a75456",
-        "type": "switch",
+        "id": "b53c87461e71baf3",
+        "type": "debug",
         "z": "9ab91bb2.9ce5d8",
         "name": "",
-        "property": "payload",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "nnull"
-            },
-            {
-                "t": "nnull"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 550,
-        "y": 200,
-        "wires": [
-            [
-                "b3f48d7ec44a9645"
-            ],
-            [
-                "c451905a7368c9a7"
-            ]
-        ]
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 400,
+        "y": 120,
+        "wires": []
     }
 ]
