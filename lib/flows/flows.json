@@ -67,7 +67,7 @@
         "type": "function",
         "z": "9ab91bb2.9ce5d8",
         "name": "",
-        "func": "msg.payload.type = \"message\"\nmsg.payload.chatId = 1354493990\nmsg.payload.content = msg.payload.ping\nreturn msg;",
+        "func": "msg.payload.type = \"message\"\nmsg.payload.chatId = 1354493990\nmsg.payload.content = msg.payload.body.data\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
