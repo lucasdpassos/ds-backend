@@ -31,6 +31,22 @@
         "verboselogging": false
     },
     {
+        "id": "7854df66fe21c463",
+        "type": "mongodb",
+        "hostname": "127.0.0.1",
+        "port": "32",
+        "db": "mongodb+srv://@cluster0.tg5xe.mongodb.net/resolvTestcluster",
+        "name": ""
+    },
+    {
+        "id": "4c5cdbb2d3aaa50c",
+        "type": "mongodb-var",
+        "uri": "mongodb+srv://lucasdpassos:tatooine@cluster0.tg5xe.mongodb.net/resolvTestcluster?retryWrites=true&w=majority",
+        "name": "",
+        "options": "",
+        "parallelism": "-1"
+    },
+    {
         "id": "cf6ba580.d136e8",
         "type": "http in",
         "z": "9ab91bb2.9ce5d8",
@@ -44,7 +60,8 @@
         "wires": [
             [
                 "da02cb6ebc0e7559",
-                "b53c87461e71baf3"
+                "b53c87461e71baf3",
+                "8caf7bb91a600a10"
             ]
         ]
     },
@@ -67,7 +84,7 @@
         "type": "function",
         "z": "9ab91bb2.9ce5d8",
         "name": "",
-        "func": "msg.payload.type = \"message\"\nmsg.payload.chatId = 1354493990\nmsg.payload.content = msg.payload.ping\nreturn msg;",
+        "func": "msg.payload.type = \"message\"\nmsg.payload.chatId = 1354493990\nmsg.payload.content = `O cliente ${msg.payload.data.st_nome_sac} acabou de realizar uma alteração no cadastro`\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -78,7 +95,8 @@
         "wires": [
             [
                 "527b143fa89c4d92",
-                "ad881a70c4d9014f"
+                "ad881a70c4d9014f",
+                "205dcbc85c4a4b95"
             ]
         ]
     },
@@ -115,5 +133,31 @@
         "x": 580,
         "y": 400,
         "wires": []
+    },
+    {
+        "id": "8caf7bb91a600a10",
+        "type": "http response",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 330,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "205dcbc85c4a4b95",
+        "type": "mongodb-var in",
+        "z": "9ab91bb2.9ce5d8",
+        "service": "_ext_",
+        "configNode": "4c5cdbb2d3aaa50c",
+        "name": "",
+        "collection": "test",
+        "operation": "insert",
+        "x": 1130,
+        "y": 320,
+        "wires": [
+            []
+        ]
     }
 ]
