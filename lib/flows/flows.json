@@ -47,6 +47,20 @@
         "parallelism": "-1"
     },
     {
+        "id": "153144729e5778a1",
+        "type": "aws-signature-auth",
+        "displayName": ""
+    },
+    {
+        "id": "6aa5f09a8f4d065c",
+        "type": "aws-sdk-config",
+        "name": "Lucas",
+        "accesskey": "AKIAWNP6IN5KKFZCEJE6",
+        "secretkey": "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",
+        "region": "us-east-1",
+        "iamrole": false
+    },
+    {
         "id": "cf6ba580.d136e8",
         "type": "http in",
         "z": "9ab91bb2.9ce5d8",
@@ -56,12 +70,13 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 130,
-        "y": 200,
+        "y": 220,
         "wires": [
             [
                 "da02cb6ebc0e7559",
                 "b53c87461e71baf3",
-                "8caf7bb91a600a10"
+                "8caf7bb91a600a10",
+                "3badbf043a473f11"
             ]
         ]
     },
@@ -73,10 +88,12 @@
         "bot": "9e5eac024310308f",
         "haserroroutput": false,
         "outputs": 1,
-        "x": 570,
-        "y": 240,
+        "x": 590,
+        "y": 100,
         "wires": [
-            []
+            [
+                "785603ce9282e3db"
+            ]
         ]
     },
     {
@@ -84,19 +101,17 @@
         "type": "function",
         "z": "9ab91bb2.9ce5d8",
         "name": "",
-        "func": "msg.payload.type = \"message\"\nmsg.payload.chatId = 1354493990\nmsg.payload.content = `O cliente ${msg.payload.data.st_nome_sac} acabou de realizar uma alteração no cadastro`\nreturn msg;",
+        "func": "msg.payload.type = \"message\"\nmsg.payload.chatId = 1354493990\n\nconst filteredInfo = {\n    _id: 123,\n    nome_cliente: msg.payload.data.st_nome_sac,\n    cpf_cliente: msg.payload.data.st_cgc_sac,\n    email_cliente: msg.payload.data.st_email_sac\n    \n}\nmsg.payload.content = filteredInfo\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 310,
-        "y": 320,
+        "x": 340,
+        "y": 220,
         "wires": [
             [
-                "527b143fa89c4d92",
-                "ad881a70c4d9014f",
-                "205dcbc85c4a4b95"
+                "ad881a70c4d9014f"
             ]
         ]
     },
@@ -113,8 +128,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 410,
-        "y": 120,
+        "x": 100,
+        "y": 180,
         "wires": []
     },
     {
@@ -126,12 +141,12 @@
         "tosidebar": true,
         "console": true,
         "tostatus": false,
-        "complete": "payload",
+        "complete": "payload.content",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 580,
-        "y": 400,
+        "x": 510,
+        "y": 280,
         "wires": []
     },
     {
@@ -141,8 +156,8 @@
         "name": "",
         "statusCode": "200",
         "headers": {},
-        "x": 330,
-        "y": 440,
+        "x": 100,
+        "y": 260,
         "wires": []
     },
     {
@@ -154,10 +169,188 @@
         "name": "",
         "collection": "test",
         "operation": "insert",
-        "x": 1130,
-        "y": 320,
+        "x": 1120,
+        "y": 160,
         "wires": [
             []
         ]
+    },
+    {
+        "id": "3badbf043a473f11",
+        "type": "function",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "func": "msg.payload.type = \"message\"\nmsg.payload.chatId = 1354493990\nconst filteredInfo = {\n    nome_cliente: msg.payload.data.st_nome_sac,\n    cpf_cliente: msg.payload.data.st_cgc_sac,\n    email_cliente: msg.payload.data.st_email_sac\n\n}\nconst stringInfo = JSON.stringify(filteredInfo)\nmsg.payload.content = `O cliente ${filteredInfo.nome_cliente} acabou de se cadastrar na plataforma com o email ${filteredInfo.email_cliente}, estou gerando a ApiKey referente ao plano contratado por ele no gateway da Amazon, os detalhes também já foram enviados para o banco de dados! 😊`\nmsg.payload.mongo = filteredInfo\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 100,
+        "wires": [
+            [
+                "527b143fa89c4d92",
+                "fced8af4bd5e5f4a"
+            ]
+        ]
+    },
+    {
+        "id": "fced8af4bd5e5f4a",
+        "type": "change",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.mongo",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 520,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "29e923cb1627ece2",
+        "type": "inject",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "headers",
+                "v": "{\"host\":\"apigateway.us-east-1.amazonaws.com\"}",
+                "vt": "json"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"name\":\"nodeRedKey\",\"description\":\"Test api key sended by insomnia\",\"enabled\":true,\"generateDistinctId\":true,\"value\":\"3ytjpg111223331crffANAKIN\",\"stageKeys\":[{\"restApiId\":\"fvon89h2yj\",\"stageName\":\"dev\"}]}",
+        "payloadType": "json",
+        "x": 870,
+        "y": 20,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ed33ceccec7083f4",
+        "type": "aws sdk",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "func": "var apigateway = new AWS.APIGateway();\napigateway.createApiKey(msg.payload, function (err, data) {\n    if (err) console.log(err, err.stack); // an error occurred\n    else console.log(data);           // successful response\n});\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 4,
+        "config": "6aa5f09a8f4d065c",
+        "x": 960,
+        "y": 100,
+        "wires": [
+            [
+                "41e5af6362291a17"
+            ]
+        ]
+    },
+    {
+        "id": "785603ce9282e3db",
+        "type": "function",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "func": "\nmsg.payload = {\n    \"name\": \"nodeRedKey3\",\n    \"description\": \"Test api key sended by insomnia\",\n    \"enabled\": true,\n    \"generateDistinctId\": true,\n    \"value\": \"3ytjpg111223331crffPADME\",\n    \"stageKeys\": [\n        {\n            \"restApiId\": \"fvon89h2yj\",\n            \"stageName\": \"dev\"\n        }\n    ]\n}\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 800,
+        "y": 100,
+        "wires": [
+            [
+                "ed33ceccec7083f4"
+            ]
+        ]
+    },
+    {
+        "id": "b7dce2610322fd25",
+        "type": "template",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{\n  \n  \"name\" : \"nodeRedKey\",\n  \"description\" : \"Test api key sended by insomnia\",\n  \"enabled\" : true,\n  \"generateDistinctId\" : true,\n  \"value\" : \"3ytjpg111223331crffANAKIN\",\n  \"stageKeys\" : [ {\n    \"restApiId\" : \"fvon89h2yj\",\n    \"stageName\" : \"dev\"\n    \n  } ]\n  \n}\n ",
+        "output": "str",
+        "x": 680,
+        "y": 20,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "199c56020f2c0832",
+        "type": "telegram sender",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "bot": "9e5eac024310308f",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1270,
+        "y": 100,
+        "wires": [
+            [
+                "f916442aaaff8fdc"
+            ]
+        ]
+    },
+    {
+        "id": "41e5af6362291a17",
+        "type": "function",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "func": "var key = msg.payload.value\n\nmsg.payload.type = \"message\"\nmsg.payload.chatId = 1354493990\n\nmsg.payload.content = `Pronto, acabei de gerar a chave da api! ele pode acessar o endpoint utilizando a key: ${key} `\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1100,
+        "y": 100,
+        "wires": [
+            [
+                "199c56020f2c0832"
+            ]
+        ]
+    },
+    {
+        "id": "f916442aaaff8fdc",
+        "type": "debug",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1190,
+        "y": 20,
+        "wires": []
     }
 ]
