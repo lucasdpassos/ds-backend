@@ -81,22 +81,6 @@
         ]
     },
     {
-        "id": "527b143fa89c4d92",
-        "type": "telegram sender",
-        "z": "9ab91bb2.9ce5d8",
-        "name": "",
-        "bot": "9e5eac024310308f",
-        "haserroroutput": false,
-        "outputs": 1,
-        "x": 590,
-        "y": 100,
-        "wires": [
-            [
-                "785603ce9282e3db"
-            ]
-        ]
-    },
-    {
         "id": "da02cb6ebc0e7559",
         "type": "function",
         "z": "9ab91bb2.9ce5d8",
@@ -107,8 +91,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 340,
-        "y": 220,
+        "x": 300,
+        "y": 320,
         "wires": [
             [
                 "ad881a70c4d9014f"
@@ -166,13 +150,15 @@
         "z": "9ab91bb2.9ce5d8",
         "service": "_ext_",
         "configNode": "4c5cdbb2d3aaa50c",
-        "name": "",
+        "name": "MongoDB",
         "collection": "test",
         "operation": "insert",
-        "x": 1120,
-        "y": 160,
+        "x": 1540,
+        "y": 100,
         "wires": [
-            []
+            [
+                "7055de1e42885c13"
+            ]
         ]
     },
     {
@@ -180,7 +166,7 @@
         "type": "function",
         "z": "9ab91bb2.9ce5d8",
         "name": "",
-        "func": "msg.payload.type = \"message\"\nmsg.payload.chatId = 1354493990\nconst filteredInfo = {\n    nome_cliente: msg.payload.data.st_nome_sac,\n    cpf_cliente: msg.payload.data.st_cgc_sac,\n    email_cliente: msg.payload.data.st_email_sac\n\n}\nconst stringInfo = JSON.stringify(filteredInfo)\nmsg.payload.content = `O cliente ${filteredInfo.nome_cliente} acabou de se cadastrar na plataforma com o email ${filteredInfo.email_cliente}, estou gerando a ApiKey referente ao plano contratado por ele no gateway da Amazon, os detalhes também já foram enviados para o banco de dados! 😊`\nmsg.payload.mongo = filteredInfo\n\nreturn msg;\n",
+        "func": "const filteredInfo = {\n    nomeCliente: msg.payload.data.st_nome_sac,\n    cpfCliente: msg.payload.data.st_cgc_sac,\n    emailCliente: msg.payload.data.st_email_sac\n\n}\nconst stringInfo = JSON.stringify(filteredInfo)\n\nmsg.mongo = filteredInfo\n\nreturn msg;\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -190,8 +176,7 @@
         "y": 100,
         "wires": [
             [
-                "527b143fa89c4d92",
-                "fced8af4bd5e5f4a"
+                "785603ce9282e3db"
             ]
         ]
     },
@@ -203,7 +188,7 @@
         "rules": [
             {
                 "t": "move",
-                "p": "payload.mongo",
+                "p": "mongo",
                 "pt": "msg",
                 "to": "payload",
                 "tot": "msg"
@@ -214,38 +199,13 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 520,
+        "x": 1370,
         "y": 160,
         "wires": [
-            []
-        ]
-    },
-    {
-        "id": "29e923cb1627ece2",
-        "type": "inject",
-        "z": "9ab91bb2.9ce5d8",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "headers",
-                "v": "{\"host\":\"apigateway.us-east-1.amazonaws.com\"}",
-                "vt": "json"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "{\"name\":\"nodeRedKey\",\"description\":\"Test api key sended by insomnia\",\"enabled\":true,\"generateDistinctId\":true,\"value\":\"3ytjpg111223331crffANAKIN\",\"stageKeys\":[{\"restApiId\":\"fvon89h2yj\",\"stageName\":\"dev\"}]}",
-        "payloadType": "json",
-        "x": 870,
-        "y": 20,
-        "wires": [
-            []
+            [
+                "205dcbc85c4a4b95",
+                "44b6f7825c81c589"
+            ]
         ]
     },
     {
@@ -253,15 +213,15 @@
         "type": "aws sdk",
         "z": "9ab91bb2.9ce5d8",
         "name": "",
-        "func": "var apigateway = new AWS.APIGateway();\napigateway.createApiKey(msg.payload, function (err, data) {\n    if (err) console.log(err, err.stack); // an error occurred\n    else console.log(data);           // successful response\n});\n\nreturn msg;",
+        "func": "var apigateway = new AWS.APIGateway();\napigateway.createApiKey(msg.payload, function (err, data) {\n    if (err) console.log(err, err.stack); // an error occurred\n    else{\n        console.log(data);\n        msg.payload = data\n        callback(msg)\n    }            // successful response\n});\n\n\n\nreturn msg;",
         "outputs": 1,
-        "noerr": 4,
+        "noerr": 7,
         "config": "6aa5f09a8f4d065c",
         "x": 960,
         "y": 100,
         "wires": [
             [
-                "41e5af6362291a17"
+                "1a8301813b4aedf5"
             ]
         ]
     },
@@ -270,13 +230,18 @@
         "type": "function",
         "z": "9ab91bb2.9ce5d8",
         "name": "",
-        "func": "\nmsg.payload = {\n    \"name\": \"nodeRedKey3\",\n    \"description\": \"Test api key sended by insomnia\",\n    \"enabled\": true,\n    \"generateDistinctId\": true,\n    \"value\": \"3ytjpg111223331crffPADME\",\n    \"stageKeys\": [\n        {\n            \"restApiId\": \"fvon89h2yj\",\n            \"stageName\": \"dev\"\n        }\n    ]\n}\n\n\nreturn msg;",
+        "func": "\nvar keyValue = randomHash.generateHash({length:20})\n\nvar clientName = msg.mongo.nomeCliente\n\n\nmsg.payload = {\n    \"name\": \"apiKey de \"+clientName,\n    \"description\": \"Test api key sended by insomnia\",\n    \"enabled\": true,\n    \"generateDistinctId\": true,\n    \"value\":keyValue + clientName.split(' ').join(''),\n    \"stageKeys\": [\n        {\n            \"restApiId\": \"fvon89h2yj\",\n            \"stageName\": \"dev\"\n        }\n    ]\n}\n\nmsg.mongo.apiKey = {\n    \"apiKey\": msg.payload.value,\n    \"apiKeyStatus\": true,\n    \"usagePlan\":\"Basic\"\n}\n\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "libs": [],
-        "x": 800,
+        "libs": [
+            {
+                "var": "randomHash",
+                "module": "random-hash"
+            }
+        ],
+        "x": 620,
         "y": 100,
         "wires": [
             [
@@ -285,59 +250,67 @@
         ]
     },
     {
-        "id": "b7dce2610322fd25",
-        "type": "template",
+        "id": "2a120d6b5b99d081",
+        "type": "debug",
         "z": "9ab91bb2.9ce5d8",
         "name": "",
-        "field": "payload",
-        "fieldType": "msg",
-        "format": "handlebars",
-        "syntax": "mustache",
-        "template": "{\n  \n  \"name\" : \"nodeRedKey\",\n  \"description\" : \"Test api key sended by insomnia\",\n  \"enabled\" : true,\n  \"generateDistinctId\" : true,\n  \"value\" : \"3ytjpg111223331crffANAKIN\",\n  \"stageKeys\" : [ {\n    \"restApiId\" : \"fvon89h2yj\",\n    \"stageName\" : \"dev\"\n    \n  } ]\n  \n}\n ",
-        "output": "str",
-        "x": 680,
-        "y": 20,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "199c56020f2c0832",
-        "type": "telegram sender",
-        "z": "9ab91bb2.9ce5d8",
-        "name": "",
-        "bot": "9e5eac024310308f",
-        "haserroroutput": false,
-        "outputs": 1,
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
         "x": 1270,
-        "y": 100,
-        "wires": [
-            [
-                "f916442aaaff8fdc"
-            ]
-        ]
+        "y": 20,
+        "wires": []
     },
     {
-        "id": "41e5af6362291a17",
-        "type": "function",
+        "id": "1a8301813b4aedf5",
+        "type": "aws sdk",
         "z": "9ab91bb2.9ce5d8",
         "name": "",
-        "func": "var key = msg.payload.value\n\nmsg.payload.type = \"message\"\nmsg.payload.chatId = 1354493990\n\nmsg.payload.content = `Pronto, acabei de gerar a chave da api! ele pode acessar o endpoint utilizando a key: ${key} `\n\nreturn msg;",
+        "func": "var params = {\n    keyId: msg.payload.id, /* required */\n    keyType: 'API_KEY', /* required */\n    usagePlanId: 'bzdj2u' /* required */\n};\n\nvar apigateway = new AWS.APIGateway();\n\napigateway.createUsagePlanKey(params, function (err, data) {\n    if (err) console.log(err, err.stack); // an error occurred\n    else{\n        console.log(data);\n        msg.payload.status = \"Ok\"\n        callback(msg)\n    }            // successful response\n});\n\nreturn msg;",
         "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1100,
+        "noerr": 7,
+        "config": "6aa5f09a8f4d065c",
+        "x": 1140,
         "y": 100,
         "wires": [
             [
-                "199c56020f2c0832"
+                "2a120d6b5b99d081",
+                "f95a91668a8c30ae"
             ]
         ]
     },
     {
-        "id": "f916442aaaff8fdc",
+        "id": "f95a91668a8c30ae",
+        "type": "switch",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "property": "payload.status",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "Ok",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1330,
+        "y": 100,
+        "wires": [
+            [
+                "fced8af4bd5e5f4a"
+            ]
+        ]
+    },
+    {
+        "id": "7055de1e42885c13",
         "type": "debug",
         "z": "9ab91bb2.9ce5d8",
         "name": "",
@@ -345,12 +318,44 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
+        "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1190,
-        "y": 20,
+        "x": 1720,
+        "y": 100,
         "wires": []
+    },
+    {
+        "id": "d3ea086497ab4495",
+        "type": "e-mail",
+        "z": "9ab91bb2.9ce5d8",
+        "server": "smtp.gmail.com",
+        "port": "465",
+        "secure": true,
+        "tls": false,
+        "name": "",
+        "dname": "Email Feedback",
+        "x": 1760,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "44b6f7825c81c589",
+        "type": "function",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "func": "\nmsg.topic = \"Seus dados de acesso a Api Resolv Risk!\"\n\nvar p = msg.payload \n\nmsg.payload = \"Olá, \" + p.nomeCliente + \"!\\nSeu cadastro na api da Resolv Risk foi efetuado com sucesso, abaixo seguem os dados de acesso:\\nSua ApiKey é \" + p.apiKey.apiKey  \nmsg.to = p.emailCliente\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1560,
+        "y": 160,
+        "wires": [
+            [
+                "d3ea086497ab4495"
+            ]
+        ]
     }
 ]

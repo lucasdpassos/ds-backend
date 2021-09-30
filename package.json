@@ -49,6 +49,7 @@
     "node-red-contrib-telegrambot": "~10.0.7",
     "node-red-mongodb": "0.0.18",
     "node-red-node-email": "~1.12.3",
+    "random-hash": "^4.0.1",
     "swagger-ui-express": "4.1.6"
   },
   "devDependencies": {
