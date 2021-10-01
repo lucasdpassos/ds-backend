@@ -34,6 +34,7 @@
     "crypto-js": "^4.1.1",
     "dotenv": "10.0.0",
     "express": "4.17.1",
+    "hash-generator": "^0.1.0",
     "hex-encode-decode": "^1.0.0",
     "node-red": "2.0.5",
     "node-red-aws-tools": "~0.0.3",

@@ -230,7 +230,7 @@
         "type": "function",
         "z": "9ab91bb2.9ce5d8",
         "name": "",
-        "func": "\nvar keyValue = randomHash.generateHash({length:20})\n\nvar clientName = msg.mongo.nomeCliente\n\n\nmsg.payload = {\n    \"name\": \"apiKey de \"+clientName,\n    \"description\": \"Test api key sended by insomnia\",\n    \"enabled\": true,\n    \"generateDistinctId\": true,\n    \"value\":keyValue + clientName.split(' ').join(''),\n    \"stageKeys\": [\n        {\n            \"restApiId\": \"fvon89h2yj\",\n            \"stageName\": \"dev\"\n        }\n    ]\n}\n\nmsg.mongo.apiKey = {\n    \"apiKey\": msg.payload.value,\n    \"apiKeyStatus\": true,\n    \"usagePlan\":\"Basic\"\n}\n\n\nreturn msg;",
+        "func": "\nvar keyValue = generateHash(20)\n\nvar clientName = msg.mongo.nomeCliente\n\n\nmsg.payload = {\n    \"name\": \"apiKey de \"+clientName,\n    \"description\": \"Test api key sended by insomnia\",\n    \"enabled\": true,\n    \"generateDistinctId\": true,\n    \"value\":keyValue + clientName.split(' ').join(''),\n    \"stageKeys\": [\n        {\n            \"restApiId\": \"fvon89h2yj\",\n            \"stageName\": \"dev\"\n        }\n    ]\n}\n\nmsg.mongo.apiKey = {\n    \"apiKey\": msg.payload.value,\n    \"apiKeyStatus\": true,\n    \"usagePlan\":\"Basic\"\n}\n\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -239,6 +239,10 @@
             {
                 "var": "randomHash",
                 "module": "random-hash"
+            },
+            {
+                "var": "generateHash",
+                "module": "hash-generator"
             }
         ],
         "x": 620,
