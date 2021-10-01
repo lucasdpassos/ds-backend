@@ -4,7 +4,7 @@
   "description": "A boilerplate for production ready Node-RED applications",
   "main": "lib/index.js",
   "scripts": {
-    "start": "NODE_ENV=production node lib/index.js",
+    "start": "node lib/index.js",
     "dev": "nodemon lib/index.js --config= nodemon.json"
   },
   "repository": {
