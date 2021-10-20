@@ -46,6 +46,7 @@
     "node-red-contrib-http-request": "~0.1.14",
     "node-red-contrib-json": "~0.2.0",
     "node-red-contrib-mongodb-variable": "0.0.6",
+    "node-red-contrib-pdf": "~0.1.0",
     "node-red-contrib-salesforce": "~0.7.3",
     "node-red-contrib-telegrambot": "~10.0.7",
     "node-red-mongodb": "0.0.18",

@@ -41,7 +41,7 @@
     {
         "id": "4c5cdbb2d3aaa50c",
         "type": "mongodb-var",
-        "uri": "mongodb+srv://lucasdpassos:tatooine@cluster0.tg5xe.mongodb.net/resolvTestcluster?retryWrites=true&w=majority",
+        "uri": "mongodb+srv://lucasdpassos:tatooine@cluster0.snzki.mongodb.net/dsCluster?retryWrites=true&w=majority",
         "name": "",
         "options": "",
         "parallelism": "-1"
@@ -61,260 +61,55 @@
         "iamrole": false
     },
     {
-        "id": "cf6ba580.d136e8",
-        "type": "http in",
-        "z": "9ab91bb2.9ce5d8",
-        "name": "",
-        "url": "/hook",
-        "method": "post",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 130,
-        "y": 220,
-        "wires": [
-            [
-                "da02cb6ebc0e7559",
-                "b53c87461e71baf3",
-                "8caf7bb91a600a10",
-                "3badbf043a473f11"
-            ]
-        ]
-    },
-    {
-        "id": "da02cb6ebc0e7559",
-        "type": "function",
-        "z": "9ab91bb2.9ce5d8",
-        "name": "",
-        "func": "msg.payload.type = \"message\"\nmsg.payload.chatId = 1354493990\n\nconst filteredInfo = {\n    _id: 123,\n    nome_cliente: msg.payload.data.st_nome_sac,\n    cpf_cliente: msg.payload.data.st_cgc_sac,\n    email_cliente: msg.payload.data.st_email_sac\n    \n}\nmsg.payload.content = filteredInfo\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 300,
-        "y": 320,
-        "wires": [
-            [
-                "ad881a70c4d9014f"
-            ]
-        ]
-    },
-    {
-        "id": "b53c87461e71baf3",
-        "type": "debug",
-        "z": "9ab91bb2.9ce5d8",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": true,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 100,
-        "y": 180,
-        "wires": []
-    },
-    {
-        "id": "ad881a70c4d9014f",
-        "type": "debug",
-        "z": "9ab91bb2.9ce5d8",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": true,
-        "tostatus": false,
-        "complete": "payload.content",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 510,
-        "y": 280,
-        "wires": []
-    },
-    {
-        "id": "8caf7bb91a600a10",
-        "type": "http response",
-        "z": "9ab91bb2.9ce5d8",
-        "name": "",
-        "statusCode": "200",
-        "headers": {},
-        "x": 100,
-        "y": 260,
-        "wires": []
-    },
-    {
         "id": "205dcbc85c4a4b95",
         "type": "mongodb-var in",
         "z": "9ab91bb2.9ce5d8",
         "service": "_ext_",
         "configNode": "4c5cdbb2d3aaa50c",
         "name": "MongoDB",
-        "collection": "test",
-        "operation": "insert",
-        "x": 1540,
-        "y": 100,
+        "collection": "leads",
+        "operation": "find.forEach",
+        "x": 420,
+        "y": 260,
         "wires": [
             [
-                "7055de1e42885c13"
+                "8f68d0bc89936372",
+                "c9af48a3db5b87ab"
             ]
         ]
     },
     {
-        "id": "3badbf043a473f11",
-        "type": "function",
+        "id": "7d075257be22291d",
+        "type": "http in",
         "z": "9ab91bb2.9ce5d8",
         "name": "",
-        "func": "const filteredInfo = {\n    nomeCliente: msg.payload.data.st_nome_sac,\n    cpfCliente: msg.payload.data.st_cgc_sac,\n    emailCliente: msg.payload.data.st_email_sac\n\n}\nconst stringInfo = JSON.stringify(filteredInfo)\n\nmsg.mongo = filteredInfo\n\nreturn msg;\n",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 340,
-        "y": 100,
+        "url": "/all",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 90,
+        "y": 260,
         "wires": [
             [
-                "785603ce9282e3db"
+                "205dcbc85c4a4b95"
             ]
         ]
     },
     {
-        "id": "fced8af4bd5e5f4a",
-        "type": "change",
+        "id": "8f68d0bc89936372",
+        "type": "http response",
         "z": "9ab91bb2.9ce5d8",
         "name": "",
-        "rules": [
-            {
-                "t": "move",
-                "p": "mongo",
-                "pt": "msg",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 1370,
-        "y": 160,
-        "wires": [
-            [
-                "205dcbc85c4a4b95",
-                "44b6f7825c81c589"
-            ]
-        ]
-    },
-    {
-        "id": "ed33ceccec7083f4",
-        "type": "aws sdk",
-        "z": "9ab91bb2.9ce5d8",
-        "name": "",
-        "func": "var apigateway = new AWS.APIGateway();\napigateway.createApiKey(msg.payload, function (err, data) {\n    if (err) console.log(err, err.stack); // an error occurred\n    else{\n        console.log(data);\n        msg.payload = data\n        callback(msg)\n    }            // successful response\n});\n\n\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 7,
-        "config": "6aa5f09a8f4d065c",
-        "x": 960,
-        "y": 100,
-        "wires": [
-            [
-                "1a8301813b4aedf5"
-            ]
-        ]
-    },
-    {
-        "id": "785603ce9282e3db",
-        "type": "function",
-        "z": "9ab91bb2.9ce5d8",
-        "name": "",
-        "func": "\nvar keyValue = generateHash(20)\n\nvar clientName = msg.mongo.nomeCliente\n\n\nmsg.payload = {\n    \"name\": \"apiKey de \"+clientName,\n    \"description\": \"Test api key sended by insomnia\",\n    \"enabled\": true,\n    \"generateDistinctId\": true,\n    \"value\":keyValue + clientName.split(' ').join(''),\n    \"stageKeys\": [\n        {\n            \"restApiId\": \"fvon89h2yj\",\n            \"stageName\": \"dev\"\n        }\n    ]\n}\n\nmsg.mongo.apiKey = {\n    \"apiKey\": msg.payload.value,\n    \"apiKeyStatus\": true,\n    \"usagePlan\":\"Basic\"\n}\n\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [
-            {
-                "var": "randomHash",
-                "module": "random-hash"
-            },
-            {
-                "var": "generateHash",
-                "module": "hash-generator"
-            }
-        ],
+        "statusCode": "200",
+        "headers": {
+            "Access-Control-Allow-Origin": "http://localhost:8080"
+        },
         "x": 620,
-        "y": 100,
-        "wires": [
-            [
-                "ed33ceccec7083f4"
-            ]
-        ]
-    },
-    {
-        "id": "2a120d6b5b99d081",
-        "type": "debug",
-        "z": "9ab91bb2.9ce5d8",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": true,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1270,
-        "y": 20,
+        "y": 260,
         "wires": []
     },
     {
-        "id": "1a8301813b4aedf5",
-        "type": "aws sdk",
-        "z": "9ab91bb2.9ce5d8",
-        "name": "",
-        "func": "var params = {\n    keyId: msg.payload.id, /* required */\n    keyType: 'API_KEY', /* required */\n    usagePlanId: 'bzdj2u' /* required */\n};\n\nvar apigateway = new AWS.APIGateway();\n\napigateway.createUsagePlanKey(params, function (err, data) {\n    if (err) console.log(err, err.stack); // an error occurred\n    else{\n        console.log(data);\n        msg.payload.status = \"Ok\"\n        callback(msg)\n    }            // successful response\n});\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 7,
-        "config": "6aa5f09a8f4d065c",
-        "x": 1140,
-        "y": 100,
-        "wires": [
-            [
-                "2a120d6b5b99d081",
-                "f95a91668a8c30ae"
-            ]
-        ]
-    },
-    {
-        "id": "f95a91668a8c30ae",
-        "type": "switch",
-        "z": "9ab91bb2.9ce5d8",
-        "name": "",
-        "property": "payload.status",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "Ok",
-                "vt": "str"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 1,
-        "x": 1330,
-        "y": 100,
-        "wires": [
-            [
-                "fced8af4bd5e5f4a"
-            ]
-        ]
-    },
-    {
-        "id": "7055de1e42885c13",
+        "id": "c9af48a3db5b87ab",
         "type": "debug",
         "z": "9ab91bb2.9ce5d8",
         "name": "",
@@ -322,44 +117,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "false",
+        "complete": "true",
+        "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1720,
-        "y": 100,
+        "x": 610,
+        "y": 320,
         "wires": []
-    },
-    {
-        "id": "d3ea086497ab4495",
-        "type": "e-mail",
-        "z": "9ab91bb2.9ce5d8",
-        "server": "smtp.gmail.com",
-        "port": "465",
-        "secure": true,
-        "tls": false,
-        "name": "",
-        "dname": "Email Feedback",
-        "x": 1760,
-        "y": 160,
-        "wires": []
-    },
-    {
-        "id": "44b6f7825c81c589",
-        "type": "function",
-        "z": "9ab91bb2.9ce5d8",
-        "name": "",
-        "func": "\nmsg.topic = \"Seus dados de acesso a Api Resolv Risk!\"\n\nvar p = msg.payload \n\nmsg.payload = \"Olá, \" + p.nomeCliente + \"!\\nSeu cadastro na api da Resolv Risk foi efetuado com sucesso, abaixo seguem os dados de acesso:\\nSua ApiKey é \" + p.apiKey.apiKey  \nmsg.to = p.emailCliente\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1560,
-        "y": 160,
-        "wires": [
-            [
-                "d3ea086497ab4495"
-            ]
-        ]
     }
 ]
