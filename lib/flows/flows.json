@@ -336,7 +336,7 @@
         "name": "",
         "statusCode": "200",
         "headers": {
-            "Access-Control-Allow-Origin": "http://localhost:8080"
+            "Access-Control-Allow-Origin": "https://ds-crm.vercel.app"
         },
         "x": 920,
         "y": 380,
@@ -347,12 +347,17 @@
         "type": "function",
         "z": "9ab91bb2.9ce5d8",
         "name": "",
-        "func": "\nconst update = {\n        \"status\": msg.payload.status       \n};\n\n\nmsg.payload.mongo = [\n    { contato: msg.payload.number },\n    { $set: update },\n    { upsert: true }\n]\n\nreturn msg;",
+        "func": "const cors = require('cors')\n\nconst update = {\n        \"status\": msg.payload.status       \n};\n\n\nmsg.payload.mongo = [\n    { contato: msg.payload.number },\n    { $set: update },\n    { upsert: true }\n]\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "libs": [],
+        "libs": [
+            {
+                "var": "cors",
+                "module": "cors"
+            }
+        ],
         "x": 240,
         "y": 800,
         "wires": [
@@ -366,16 +371,15 @@
         "type": "http in",
         "z": "9ab91bb2.9ce5d8",
         "name": "",
-        "url": "/updatestatus",
+        "url": "/update",
         "method": "post",
-        "upload": false,
+        "upload": true,
         "swaggerDoc": "",
-        "x": 140,
+        "x": 120,
         "y": 700,
         "wires": [
             [
-                "d416f9fd78dedd65",
-                "03b82fc5e32e93cb"
+                "d416f9fd78dedd65"
             ]
         ]
     },
@@ -393,7 +397,7 @@
         "wires": [
             [
                 "303d93bb79f6d572",
-                "31792894acc24e3a"
+                "b441158aaeafbb69"
             ]
         ]
     },
@@ -411,35 +415,6 @@
         "statusType": "auto",
         "x": 830,
         "y": 700,
-        "wires": []
-    },
-    {
-        "id": "31792894acc24e3a",
-        "type": "http response",
-        "z": "9ab91bb2.9ce5d8",
-        "name": "",
-        "statusCode": "200",
-        "headers": {
-            "Access-Control-Allow-Origin": "*"
-        },
-        "x": 840,
-        "y": 620,
-        "wires": []
-    },
-    {
-        "id": "03b82fc5e32e93cb",
-        "type": "debug",
-        "z": "9ab91bb2.9ce5d8",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 380,
-        "y": 640,
         "wires": []
     },
     {
@@ -468,5 +443,18 @@
                 "e2ebc24bcc78d1fd"
             ]
         ]
+    },
+    {
+        "id": "b441158aaeafbb69",
+        "type": "http response",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "statusCode": "200",
+        "headers": {
+            "Access-Control-Allow-Origin": "https://ds-crm.vercel.app"
+        },
+        "x": 820,
+        "y": 640,
+        "wires": []
     }
 ]
