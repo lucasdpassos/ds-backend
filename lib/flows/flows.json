@@ -82,6 +82,30 @@
         "iamrole": false
     },
     {
+        "id": "edcd07834bbf861e",
+        "type": "telegram bot",
+        "botname": "dsCrmBot",
+        "usernames": "",
+        "chatids": "1354493990",
+        "baseapiurl": "",
+        "updatemode": "polling",
+        "pollinterval": "300",
+        "usesocks": false,
+        "sockshost": "",
+        "socksport": "6667",
+        "socksusername": "anonymous",
+        "sockspassword": "",
+        "bothost": "",
+        "botpath": "",
+        "localbotport": "8443",
+        "publicbotport": "8443",
+        "privatekey": "",
+        "certificate": "",
+        "useselfsignedcertificate": false,
+        "sslterminated": false,
+        "verboselogging": false
+    },
+    {
         "id": "205dcbc85c4a4b95",
         "type": "mongodb-var in",
         "z": "9ab91bb2.9ce5d8",
@@ -336,7 +360,7 @@
         "name": "",
         "statusCode": "200",
         "headers": {
-            "Access-Control-Allow-Origin": "https://ds-crm.vercel.app"
+            "Access-Control-Allow-Origin": "http://localhost:8080"
         },
         "x": 920,
         "y": 380,
@@ -347,7 +371,7 @@
         "type": "function",
         "z": "9ab91bb2.9ce5d8",
         "name": "",
-        "func": "const cors = require('cors')\n\nconst update = {\n        \"status\": msg.payload.status       \n};\n\n\nmsg.payload.mongo = [\n    { contato: msg.payload.number },\n    { $set: update },\n    { upsert: true }\n]\n\nreturn msg;",
+        "func": "\n\nconst update = {\n        \"status\": msg.payload.status       \n};\n\n\nmsg.mongo = [\n    { contato: msg.payload.number },\n    { $set: update },\n    { upsert: true }\n]\n\n\nmsg.telegram = {\n    type: \"message\",\n    content: `Olá, Danilo, um de seus corretores acabou de registrar o contato com um Lead, atualizei o status do lead no sistema pra você! 😉 Telefone do Lead: ${msg.payload.number}, novo status: ${msg.payload.status}`,\n    chatId: 1354493990\n}\n\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -362,7 +386,8 @@
         "y": 800,
         "wires": [
             [
-                "2e773d3913d81c5f"
+                "2e773d3913d81c5f",
+                "9d0a85191ffd5b05"
             ]
         ]
     },
@@ -379,7 +404,8 @@
         "y": 700,
         "wires": [
             [
-                "d416f9fd78dedd65"
+                "d416f9fd78dedd65",
+                "bf9176a3163da2c3"
             ]
         ]
     },
@@ -427,7 +453,7 @@
                 "t": "set",
                 "p": "payload",
                 "pt": "msg",
-                "to": "payload.mongo",
+                "to": "mongo",
                 "tot": "msg"
             }
         ],
@@ -451,10 +477,255 @@
         "name": "",
         "statusCode": "200",
         "headers": {
-            "Access-Control-Allow-Origin": "https://ds-crm.vercel.app"
+            "Access-Control-Allow-Origin": "http://localhost:8080"
         },
         "x": 820,
         "y": 640,
+        "wires": []
+    },
+    {
+        "id": "bf9176a3163da2c3",
+        "type": "debug",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 330,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "ea3356d43ed048ec",
+        "type": "telegram sender",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "bot": "edcd07834bbf861e",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 610,
+        "y": 900,
+        "wires": [
+            [
+                "97deb96d25190acf"
+            ]
+        ]
+    },
+    {
+        "id": "97deb96d25190acf",
+        "type": "debug",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 840,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "9d0a85191ffd5b05",
+        "type": "change",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "telegram",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 510,
+        "y": 980,
+        "wires": [
+            [
+                "ea3356d43ed048ec"
+            ]
+        ]
+    },
+    {
+        "id": "6ca387743ffe43cb",
+        "type": "http in",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "url": "/add",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 1160,
+        "wires": [
+            [
+                "a1ba1aee1d84daae",
+                "ae3b71d5713b46d0",
+                "28ac81f84f1efbdf",
+                "96287c813445435a"
+            ]
+        ]
+    },
+    {
+        "id": "a1ba1aee1d84daae",
+        "type": "mongodb-var in",
+        "z": "9ab91bb2.9ce5d8",
+        "service": "_ext_",
+        "configNode": "4c5cdbb2d3aaa50c",
+        "name": "MongoDB",
+        "collection": "leads",
+        "operation": "insertOne",
+        "x": 240,
+        "y": 1220,
+        "wires": [
+            [
+                "79b00db964152b7f"
+            ]
+        ]
+    },
+    {
+        "id": "28ac81f84f1efbdf",
+        "type": "debug",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 470,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "79b00db964152b7f",
+        "type": "debug",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 590,
+        "y": 1180,
+        "wires": []
+    },
+    {
+        "id": "ae3b71d5713b46d0",
+        "type": "function",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "func": "\nmsg.telegram = {\n    type: \"message\",\n    content: `Um lead acabou de entrar no sistema!\"`,\n    chatId: 1354493990\n}\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "cors",
+                "module": "cors"
+            }
+        ],
+        "x": 220,
+        "y": 1320,
+        "wires": [
+            [
+                "0d2e4c6209e607a8"
+            ]
+        ]
+    },
+    {
+        "id": "cd61077366e87bf4",
+        "type": "telegram sender",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "bot": "edcd07834bbf861e",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 610,
+        "y": 1280,
+        "wires": [
+            [
+                "8f64f604f4df3f97"
+            ]
+        ]
+    },
+    {
+        "id": "8f64f604f4df3f97",
+        "type": "debug",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 840,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "0d2e4c6209e607a8",
+        "type": "change",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "telegram",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 430,
+        "y": 1320,
+        "wires": [
+            [
+                "cd61077366e87bf4"
+            ]
+        ]
+    },
+    {
+        "id": "96287c813445435a",
+        "type": "http response",
+        "z": "9ab91bb2.9ce5d8",
+        "name": "",
+        "statusCode": "200",
+        "headers": {
+            "Access-Control-Allow-Origin": "http://localhost:8080"
+        },
+        "x": 660,
+        "y": 1080,
         "wires": []
     }
 ]
